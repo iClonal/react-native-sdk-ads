@@ -1,0 +1,20 @@
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="io.github.ichonal.sdk.ads">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id"/>
+        <meta-data
+            android:name="io.github.ichonal.sdk.ads.admob.GADBANNER_ID"
+            android:value="@string/admob_banner_id"/>
+        <meta-data
+            android:name="io.github.ichonal.sdk.ads.admob.GADINTERSTITIAL_ID"
+            android:value="@string/admob_interstitial_id"/>
+        <meta-data
+            android:name="io.github.ichonal.sdk.ads.admob.GADREWARDED_ID"
+            android:value="@string/admob_rewarded_id"/>
+    </application>
+</manifest>
+  
