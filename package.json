@@ -1,0 +1,30 @@
+{
+  "name": "react-native-sdk-ads",
+  "version": "1.0.0",
+  "description": "Ads Mediation for React Native",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native",
+    "sdk",
+    "ads",
+    "admob",
+    "applovin",
+    "banner",
+    "interstitial",
+    "mopub"
+  ],
+  "author": "Wei Jian <wei.jian.coder+github@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/iChonal/react-native-sdk-ads#readme",
+  "peerDependencies": {
+    "react-native": "^0.41.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iChonal/react-native-sdk-ads.git"
+  }
+}
