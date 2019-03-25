@@ -44,6 +44,7 @@ public class RNSdkAdMobInterstitialModule extends RNSdkAdsInterstitialModule {
             @Override
             public void onAdClosed() {
                 sendEvent(RNSdkAdsConstant.InterstitialEvent.CLOSED, null);
+                RNSdkAdMobInterstitialModule.this.requestAd();
             }
             @Override
             public void onAdFailedToLoad(int errorCode) {

@@ -34,8 +34,10 @@ public class RNSdkAdMobRewardedModule extends RNSdkAdsRewardedModule implements 
         super(reactContext);
 
         try {
-            PackageManager pm = reactContext.getPackageManager();
-            String pkgName = reactContext.getPackageName();
+            Context ctx = reactContext.getApplicationContext();
+
+            PackageManager pm = ctx.getPackageManager();
+            String pkgName = ctx.getPackageName();
             ApplicationInfo pInfo = pm.getApplicationInfo(pkgName, PackageManager.GET_META_DATA);
             String adUnitID = pInfo.metaData.getString(RNSdkAdsConstant.META_KEY_PREFIX + RNSdkAdMobConstant.META_KEY_REWARDED_ID);
             if (adUnitID == null) {
@@ -47,6 +49,34 @@ public class RNSdkAdMobRewardedModule extends RNSdkAdsRewardedModule implements 
             this.adUnitID = RNSdkAdMobConstant.TEST_REWARDED_ADUNIT_ID;
         }
     }
+
+
+    //@Override
+    //public void onHostResume() {
+    //    super.onHostResume();
+    //    Activity ctx = getCurrentActivity();
+    //    if(mRewardedVideoAd != null && ctx != null) {
+    //        mRewardedVideoAd.resume(ctx);
+    //    }
+    //}
+
+    //@Override
+    //public void onHostPause() {
+    //    Activity ctx = getCurrentActivity();
+    //    if (mRewardedVideoAd != null && ctx != null) {
+    //        mRewardedVideoAd.pause(ctx);
+    //    }
+    //    super.onHostPause();
+    //}
+
+    //@Override
+    //public void onHostDestroy() {
+    //    Activity ctx = getCurrentActivity();
+    //    if (mRewardedVideoAd != null && ctx != null) {
+    //        mRewardedVideoAd.destroy(ctx);
+    //    }
+    //    super.onHostDestroy();
+    //}
 
     @Override
     public void onRewarded(RewardItem rewardItem) {
@@ -81,6 +111,7 @@ public class RNSdkAdMobRewardedModule extends RNSdkAdsRewardedModule implements 
     @Override
     public void onRewardedVideoAdClosed() {
         sendEvent(RNSdkAdsConstant.RewardedEvent.CLOSED, null);
+        requestAd();
     }
 
     @Override
@@ -134,12 +165,11 @@ public class RNSdkAdMobRewardedModule extends RNSdkAdsRewardedModule implements 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Context ctx = RNSdkAdMobRewardedModule.this.getCurrentActivity();
+                Activity ctx = RNSdkAdMobRewardedModule.this.getCurrentActivity();
                 if (ctx == null) {
-                    ctx = RNSdkAdMobRewardedModule.this.getReactApplicationContext();
+                    return;
                 }
                 RNSdkAdMobRewardedModule.this.mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(ctx);
-
                 RNSdkAdMobRewardedModule.this.mRewardedVideoAd.setRewardedVideoAdListener(RNSdkAdMobRewardedModule.this);
 
                 if (!mRewardedVideoAd.isLoaded()) {
@@ -186,20 +216,41 @@ public class RNSdkAdMobRewardedModule extends RNSdkAdsRewardedModule implements 
     }
 
     @Override
-    public void onActivityResumed(Activity activity) {
-        super.onActivityResumed(activity);
-        Log.d(TAG, activity.getClass().getSimpleName() + " Resume");
+    public void onHostResume() {
+        super.onHostResume();
+        Activity ctx = getCurrentActivity();
+        if (ctx == null) return;
+        Log.d(TAG, ctx.getClass().getName() + String.format(" Resume %s ", ctx));
+        if (ctx.getClass().getName().startsWith("com.davincibook")) {
+            if (mRewardedVideoAd != null) {
+                mRewardedVideoAd.resume(ctx);
+            }
+        }
     }
 
     @Override
-    public void onActivityPaused(Activity activity) {
-        super.onActivityPaused(activity);
-        Log.d(TAG, activity.getClass().getSimpleName() + " Pause");
+    public void onHostPause() {
+        super.onHostPause();
+        Activity ctx = getCurrentActivity();
+        if (ctx == null) return;
+        Log.d(TAG, ctx.getClass().getName() + String.format(" Pause %s ", ctx));
+        if (ctx.getClass().getName().startsWith("com.davincibook")) {
+            if (mRewardedVideoAd != null) {
+                mRewardedVideoAd.pause(ctx);
+            }
+        }
     }
 
     @Override
-    public void onActivityDestroyed(Activity activity) {
-        super.onActivityDestroyed(activity);
-        Log.d(TAG, activity.getClass().getSimpleName() + " Destroy");
+    public void onHostDestroy() {
+        super.onHostDestroy();
+        Activity ctx = getCurrentActivity();
+        if (ctx == null) return;
+        Log.d(TAG, ctx.getClass().getName() + String.format(" Destroy %s ", ctx));
+        if (ctx.getClass().getName().startsWith("com.davincibook")) {
+            if (mRewardedVideoAd != null) {
+                mRewardedVideoAd.destroy(ctx);
+            }
+        }
     }
 }
