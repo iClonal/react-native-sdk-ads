@@ -9,6 +9,7 @@ import android.view.View;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -19,17 +20,12 @@ import io.github.ichonal.sdk.ads.RNSdkAdsConstant.BannerEvent;
 import io.github.ichonal.sdk.ads.RNSdkAdsConstant.BannerProp;
 
 
-public abstract class RNSdkAdsBannerViewManager<T extends RNSdkAdsBannerView> extends ViewGroupManager<T> {
+public abstract class RNSdkAdsBannerViewManager<T extends View & IRNSdkAdsBanner> extends SimpleViewManager<T> {
     public static final String REACT_CLASS = "RNSdkAdsBannerView";
 
     @Override
     public String getName() {
         return REACT_CLASS;
-    }
-
-    @Override
-    public void addView(T parent, View child, int index) {
-        throw new RuntimeException("RNSGADBannerView cannot have subviews");
     }
 
     @Override

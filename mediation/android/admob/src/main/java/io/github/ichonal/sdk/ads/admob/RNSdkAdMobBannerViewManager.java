@@ -3,23 +3,26 @@ package io.github.ichonal.sdk.ads.admob;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.support.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.views.view.ReactViewGroup;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
-import io.github.ichonal.sdk.ads.RNSdkAdsBannerView;
+import io.github.ichonal.sdk.ads.IRNSdkAdsBanner;
 import io.github.ichonal.sdk.ads.RNSdkAdsBannerViewManager;
 import io.github.ichonal.sdk.ads.RNSdkAdsConstant;
 import io.github.ichonal.sdk.ads.RNSdkAdsConstant.BannerSizeType;
 
-class RNSdkAdMobBannerView extends RNSdkAdsBannerView {
+class RNSdkAdMobBannerView extends ReactViewGroup implements IRNSdkAdsBanner {
     protected AdView adView;
 
     String adUnitID;
@@ -104,8 +107,13 @@ class RNSdkAdMobBannerView extends RNSdkAdsBannerView {
         this.addView(this.adView);
     }
 
+    protected void sendEvent(String name, @Nullable WritableMap event) {
+        ReactContext ctx = (ReactContext) getContext();
+        ctx.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), name, event);
+    }
+
     @Override
-    protected void sendOnSizeChangeEvent() {
+    public void sendOnSizeChangeEvent() {
         int width;
         int height;
         ReactContext reactContext = (ReactContext) getContext();

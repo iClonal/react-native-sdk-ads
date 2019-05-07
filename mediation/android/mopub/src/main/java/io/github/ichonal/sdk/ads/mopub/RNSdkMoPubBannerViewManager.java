@@ -1,42 +1,25 @@
 package io.github.ichonal.sdk.ads.mopub;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.common.MapBuilder;
-import com.facebook.react.uimanager.PixelUtil;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.mopub.common.util.Dips;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import io.github.ichonal.sdk.ads.R;
-import io.github.ichonal.sdk.ads.RNSdkAdsBannerView;
+import io.github.ichonal.sdk.ads.IRNSdkAdsBanner;
 import io.github.ichonal.sdk.ads.RNSdkAdsBannerViewManager;
 import io.github.ichonal.sdk.ads.RNSdkAdsConstant;
 
-class RNSdkMoPubBannerView extends MoPubView implements MoPubView.BannerAdListener {
+class RNSdkMoPubBannerView extends MoPubView implements IRNSdkAdsBanner, MoPubView.BannerAdListener {
 
     String adUnitId;
 
@@ -67,18 +50,23 @@ class RNSdkMoPubBannerView extends MoPubView implements MoPubView.BannerAdListen
         child.layout(0, 0, width, height);
     }
 
-    //@Override
+    @Override
     public void loadBanner() {
         this.loadAd();
     }
 
-    //@Override
+    @Override
     public void setAdSize(String sizeType) {
 
     }
 
-    //@Override
-    protected void sendOnSizeChangeEvent() {
+    @Override
+    public void setTestDevices(String[] devices) {
+
+    }
+
+    @Override
+    public void sendOnSizeChangeEvent() {
         WritableMap event = Arguments.createMap();
         int width = this.getAdWidth();
         int height = this.getAdHeight();
@@ -135,66 +123,10 @@ class RNSdkMoPubBannerView extends MoPubView implements MoPubView.BannerAdListen
 }
 
 
-public class RNSdkMoPubBannerViewManager extends SimpleViewManager<RNSdkMoPubBannerView> {
-    public static final String REACT_CLASS = "RNSdkAdsBannerView";
-
-    @Override
-    public String getName() {
-        return REACT_CLASS;
-    }
-
+public class RNSdkMoPubBannerViewManager extends RNSdkAdsBannerViewManager<RNSdkMoPubBannerView> {
     @Override
     protected RNSdkMoPubBannerView createViewInstance(ThemedReactContext reactContext) {
         RNSdkMoPubBannerView view = new RNSdkMoPubBannerView(reactContext);
         return view;
-    }
-
-    @Override
-    @Nullable
-    public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
-        MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
-        String[] events = {
-                RNSdkAdsConstant.BannerEvent.SIZE_CHANGE,
-                RNSdkAdsConstant.BannerEvent.LOADED,
-                RNSdkAdsConstant.BannerEvent.FAILED_TO_LOAD,
-                RNSdkAdsConstant.BannerEvent.OPENED,
-                RNSdkAdsConstant.BannerEvent.CLOSED,
-                RNSdkAdsConstant.BannerEvent.LEFT_APPLICATION
-        };
-        for (int i = 0; i < events.length; i++) {
-            builder.put(events[i], MapBuilder.of("registrationName", events[i]));
-        }
-        return builder.build();
-    }
-
-    @Nullable
-    @Override
-    public Map<String, Integer> getCommandsMap() {
-        return MapBuilder.of(RNSdkAdsConstant.BannerCommandKey.LOAD_BANNER, RNSdkAdsConstant.BannerCommand.LOAD_BANNER);
-    }
-
-    @Override
-    public void receiveCommand(RNSdkMoPubBannerView root, int commandId, @javax.annotation.Nullable ReadableArray args) {
-        switch (commandId) {
-            case RNSdkAdsConstant.BannerCommand.LOAD_BANNER: {
-                root.loadBanner();
-                break;
-            }
-            default: {
-
-            }
-        }
-    }
-
-    @ReactProp(name = RNSdkAdsConstant.BannerProp.AD_SIZE)
-    public void setPropAdSize(final RNSdkMoPubBannerView view, final String sizeType) {
-        view.setAdSize(sizeType);
-    }
-
-    @ReactProp(name = RNSdkAdsConstant.BannerProp.TEST_DEVICES)
-    public void setPropTestDevices(final RNSdkMoPubBannerView view, final ReadableArray devices) {
-        ReadableNativeArray nativeArray = (ReadableNativeArray)devices;
-        ArrayList<Object> list = nativeArray.toArrayList();
-        //view.setTestDevices(list.toArray(new String[list.size()]));
     }
 }

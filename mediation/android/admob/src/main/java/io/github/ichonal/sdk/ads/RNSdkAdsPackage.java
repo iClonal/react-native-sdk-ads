@@ -1,5 +1,5 @@
 
-package io.github.ichonal.sdk.ads.admob;
+package io.github.ichonal.sdk.ads;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,7 +11,12 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
 
-public class RNSdkAdMobPackage implements ReactPackage {
+import io.github.ichonal.sdk.ads.admob.RNSdkAdMobBannerViewManager;
+import io.github.ichonal.sdk.ads.admob.RNSdkAdMobInterstitialModule;
+import io.github.ichonal.sdk.ads.admob.RNSdkAdMobModule;
+import io.github.ichonal.sdk.ads.admob.RNSdkAdMobRewardedModule;
+
+public class RNSdkAdsPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.<NativeModule>asList(
